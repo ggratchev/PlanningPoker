@@ -4,9 +4,24 @@ function CreerPartie() {
     const [pseudo, setPseudo] = useState('')
     const [modeDeJeu, setModeDeJeu] = useState('unanimite')
 
-    const valider = () => {
-        console.log("pseudo :", pseudo)
-        console.log("modeDeJeu :", modeDeJeu)
+    const valider = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/api/creer-partie', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    pseudo: pseudo,
+                    modeDeJeu: modeDeJeu
+                })
+            })
+
+            const data = await response.json()
+            console.log('Réponse du serveur:', data)
+        } catch (error) {
+            console.error('Erreur:', error)
+        }
     }
 
     return (
@@ -20,7 +35,8 @@ function CreerPartie() {
             <select value={modeDeJeu} onChange={(e) => setModeDeJeu(e.target.value)}>
                 <option value="unanimite">Unanimité</option>
                 <option value="mediane">Médiane</option>
-            </select><button onClick={valider} disabled={pseudo.trim() === ''}>Valider</button>
+            </select>
+            <button onClick={valider} disabled={pseudo.trim() === ''}>Valider</button>
         </div>
     )
 }
