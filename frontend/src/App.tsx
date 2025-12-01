@@ -7,11 +7,15 @@ function App() {
     navigate("/creer-partie");
   }
 
+  const RejoindrePartie = () => {
+    navigate("/rejoindre-partie");
+  }
+
   return (
     <div>
       <h1>Planning Poker</h1>
       <button onClick={CreerPartie}>Créer une partie</button>
-      <button>Rejoindre une partie</button>
+      <button onClick={RejoindrePartie}>Rejoindre une partie</button>
     </div>
   )
 }
