@@ -1,0 +1,20 @@
+.bouton_principal {
+    padding: 15px;
+    border-radius: 10px;
+    margin: 15px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    background-color: #4caf50;
+    width: 40%;
+    font-size: 16px;
+}
+
+h1 {
+    font-size: x-large;
+    text-align: center;
+    color: #2e8330;
+    font-family: "Rubik";
+}
+
+
