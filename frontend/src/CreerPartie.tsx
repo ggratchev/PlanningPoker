@@ -20,7 +20,7 @@ function CreerPartie() {
             <select value={modeDeJeu} onChange={(e) => setModeDeJeu(e.target.value)}>
                 <option value="unanimite">Unanimité</option>
                 <option value="mediane">Médiane</option>
-            </select><button onClick={valider}>Valider</button>
+            </select><button onClick={valider} disabled={pseudo.trim() === ''}>Valider</button>
         </div>
     )
 }
