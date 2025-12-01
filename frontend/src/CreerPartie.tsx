@@ -2,9 +2,11 @@ import { useState } from 'react'
 
 function CreerPartie() {
     const [pseudo, setPseudo] = useState('')
+    const [modeDeJeu, setModeDeJeu] = useState('unanimite')
 
     const valider = () => {
         console.log("pseudo :", pseudo)
+        console.log("modeDeJeu :", modeDeJeu)
     }
 
     return (
@@ -15,7 +17,10 @@ function CreerPartie() {
                 value={pseudo}
                 onChange={(e) => setPseudo(e.target.value)}
             />
-            <button onClick={valider}>Valider</button>
+            <select value={modeDeJeu} onChange={(e) => setModeDeJeu(e.target.value)}>
+                <option value="unanimite">Unanimité</option>
+                <option value="mediane">Médiane</option>
+            </select><button onClick={valider}>Valider</button>
         </div>
     )
 }
