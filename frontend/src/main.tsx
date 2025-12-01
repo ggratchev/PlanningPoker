@@ -13,7 +13,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/" element={<App />} />
         <Route path="/creer-partie" element={<CreerPartie />} />
         <Route path="/rejoindre-partie" element={<RejoindrePartie />} />
-        <Route path="/salle-attente" element={<SalleAttente />} />
+        <Route path="/salle-attente/:code" element={<SalleAttente />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,

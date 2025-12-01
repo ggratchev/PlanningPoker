@@ -22,10 +22,12 @@ function CreerPartie() {
 
             const data = await response.json()
             console.log('Réponse du serveur:', data)
+
+            navigate(`/salle-attente/${data.code}`)
         } catch (error) {
             console.error('Erreur:', error)
         }
-        navigate('/salle-attente')
+        
     }
 
     return (

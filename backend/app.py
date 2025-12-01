@@ -35,7 +35,7 @@ def creer_partie():
 
     print("toutes les parties:", parties)
     return jsonify({
-        'message': 'Partie créée'
+        'code': code_partie
     })
 
 if __name__ == '__main__':
