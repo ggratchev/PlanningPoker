@@ -14,9 +14,13 @@ function App() {
 
   return (
     <div>
-      <h1>Planning Poker</h1>
-      <button onClick={CreerPartie} class="bouton_principal">Créer une partie</button>
-      <button onClick={RejoindrePartie} class="bouton_principal">Rejoindre une partie</button>
+      <div class="texte_principal">
+        <h1>Planning Poker</h1>
+      </div>
+      <div class="boutons1">
+        <button onClick={CreerPartie} class="bouton_principal">Créer une partie</button>
+        <button onClick={RejoindrePartie} class="bouton_principal">Rejoindre une partie</button>
+      </div>
     </div>
   )
 }
