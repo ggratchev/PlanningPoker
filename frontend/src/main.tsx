@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import App from './App.tsx'
 import CreerPartie from './CreerPartie.tsx'
 import RejoindrePartie from './RejoindrePartie.tsx'
+import SalleAttente from './SalleAttente.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -12,6 +13,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/" element={<App />} />
         <Route path="/creer-partie" element={<CreerPartie />} />
         <Route path="/rejoindre-partie" element={<RejoindrePartie />} />
+        <Route path="/salle-attente" element={<SalleAttente />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,

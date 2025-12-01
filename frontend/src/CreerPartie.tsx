@@ -1,8 +1,11 @@
 import { useState } from 'react'
+import { useNavigate } from "react-router-dom"
 
 function CreerPartie() {
     const [pseudo, setPseudo] = useState('')
     const [modeDeJeu, setModeDeJeu] = useState('unanimite')
+
+    const navigate = useNavigate();
 
     const valider = async () => {
         try {
@@ -22,6 +25,7 @@ function CreerPartie() {
         } catch (error) {
             console.error('Erreur:', error)
         }
+        navigate('/salle-attente')
     }
 
     return (
