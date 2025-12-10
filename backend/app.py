@@ -14,6 +14,7 @@ def generer_code():
         if code not in parties:
             return code
 
+#route pour créer une partie
 @app.route('/api/creer-partie', methods=['POST'])
 def creer_partie():
     data = request.json
@@ -37,6 +38,16 @@ def creer_partie():
     return jsonify({
         'code': code_partie
     })
+
+#route pour recuperer infos d'une partie
+@app.route('/api/partie/<code>', methods=['GET'])
+def get_partie(code):
+    if code not in parties:
+        return jsonify({'error': 'Partie non trouvée'}), 404
+    
+    print(parties[code])
+
+    return jsonify(parties[code])
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
