@@ -25,7 +25,7 @@ function CreerPartie() {
     }
 
     return (
-        <div>
+        <div class="Creer_partie">
             <h1>Créer une partie</h1>
             <input type="text"
                 placeholder='Entrez votre pseudo'

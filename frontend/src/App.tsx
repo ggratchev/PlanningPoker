@@ -13,7 +13,7 @@ function App() {
   }
 
   return (
-    <div>
+    <div class="Div_principal">
       <div class="texte_principal">
         <h1>Planning Poker</h1>
       </div>
