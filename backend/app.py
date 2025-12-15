@@ -49,5 +49,25 @@ def get_partie(code):
 
     return jsonify(parties[code])
 
+#route pour rejoindre une partie
+@app.route('/api/rejoindre-partie/<code>', methods=['POST'])
+def rejoindre_partie(code):
+    data = request.json
+    pseudo = data.get('pseudo')
+
+    if code not in parties:
+        return jsonify({'error': 'Partie non trouvée'}), 404
+    
+    if pseudo not in parties[code]['participants']:
+        parties[code]['participants'].append(pseudo)
+    
+    print(f"{pseudo} a rejoint la partie {code}")
+    print("Participants:", parties[code]['participants'])
+    
+    return jsonify({
+        'success': True,
+        'code': code
+    })
+
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
