@@ -29,7 +29,8 @@ def creer_partie():
     parties[code_partie] = {
         'createur': pseudo_createur,
         'modeDeJeu': mode_de_jeu,
-        'participants': [pseudo_createur]
+        'participants': [pseudo_createur],
+        'statut': 'en_attente'
     }
 
     #print(parties[code_partie])

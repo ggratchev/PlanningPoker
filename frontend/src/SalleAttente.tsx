@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams, useLocation } from 'react-router-dom'
+import { useParams, useLocation, useNavigate } from 'react-router-dom'
 
 function SalleAttente() {
 
@@ -7,6 +7,7 @@ function SalleAttente() {
     const location = useLocation()
     const { pseudo, createur } = location.state || {}
     const [partie, setPartie] = useState(null)
+    const navigate = useNavigate()
 
     useEffect(() => {
         const chargerPartie = async () => {
@@ -14,13 +15,25 @@ function SalleAttente() {
                 const response = await fetch(`http://localhost:5000/api/partie/${code}`)
                 const data = await response.json()
                 setPartie(data)
+
+                // Rediriger vers la page de jeu si la partie est démarrée
+                if (data.statut === 'en_cours') {
+                    navigate(`/jeu/${code}`, {
+                        state: { pseudo: pseudo }
+                    })
+                }
             } catch (error) {
                 console.error('Erreur:', error)
             }
         }
 
         chargerPartie()
-    }, [code])
+
+        // Vérifier toutes les 2 secondes si la partie a démarré
+        const interval = setInterval(chargerPartie, 2000)
+
+        return () => clearInterval(interval)
+    }, [code, navigate, pseudo])
 
 
     const demarrerPartie = async () => {
@@ -30,7 +43,11 @@ function SalleAttente() {
             })
             const data = await response.json()
             console.log('Partie démarrée:', data)
-            // Rediriger vers la page de jeu
+
+            // Rediriger le créateur vers la page de jeu
+            navigate(`/jeu/${code}`, {
+                state: { pseudo: pseudo }
+            })
         } catch (error) {
             console.error('Erreur:', error)
         }
