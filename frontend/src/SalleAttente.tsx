@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useLocation } from 'react-router-dom'
 
 function SalleAttente() {
 
     const { code } = useParams()
+    const location = useLocation()
+    const { pseudo, createur } = location.state || {}
     const [partie, setPartie] = useState(null)
 
     useEffect(() => {
@@ -20,9 +22,23 @@ function SalleAttente() {
         chargerPartie()
     }, [code])
 
+
+    const demarrerPartie = async () => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/demarrer-partie/${code}`, {
+                method: 'POST'
+            })
+            const data = await response.json()
+            console.log('Partie démarrée:', data)
+            // Rediriger vers la page de jeu
+        } catch (error) {
+            console.error('Erreur:', error)
+        }
+    }
+
     if (!partie) {
-    return <div>Chargement...</div>
-}
+        return <div>Chargement...</div>
+    }
 
     return (
         <div>
@@ -36,6 +52,11 @@ function SalleAttente() {
                     <li key={index}>{participant}</li>
                 ))}
             </ul>
+
+
+            {createur && (
+                <button onClick={demarrerPartie}>Démarrer la partie</button>
+            )}
         </div>
     )
 }

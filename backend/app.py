@@ -69,5 +69,20 @@ def rejoindre_partie(code):
         'code': code
     })
 
+#route pour démarrer une partie
+@app.route('/api/demarrer-partie/<code>', methods=['POST'])
+def demarrer_partie(code):
+    if code not in parties:
+        return jsonify({'error': 'Partie non trouvée'}), 404
+    
+    parties[code]['statut'] = 'en_cours'
+    
+    #print(f"Partie {code} démarrée")
+    
+    return jsonify({
+        'success': True,
+        'code': code
+    })
+
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

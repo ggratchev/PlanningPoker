@@ -28,8 +28,10 @@ function RejoindrePartie() {
 
             console.log('Partie rejointe:', data)
 
-            // Rediriger vers la salle d'attente
-            navigate(`/salle-attente/${code}`)
+            navigate(`/salle-attente/${code}`, {
+                state: { pseudo: pseudo, createur: false }
+            })
+
         } catch (error) {
             console.error('Erreur:', error)
             alert('Erreur lors de la connexion à la partie')
