@@ -15,9 +15,12 @@ function CreerPartie() {
             const reader = new FileReader()
             reader.onload = (event) => {
                 try {
-                    const json = JSON.parse(event.target.result)
-                    setTaches(json)
-                    console.log('Tâches importées:', json)
+                    const result = event.target?.result
+                    if (typeof result === 'string') {
+                        const json = JSON.parse(result)
+                        setTaches(json)
+                        console.log('Tâches importées:', json)
+                    }
                 } catch (error) {
                     console.error('Erreur lors de la lecture du fichier JSON:', error)
                     alert('Fichier JSON invalide')
