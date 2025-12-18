@@ -16,7 +16,7 @@ body, html {
   border-radius: 16px;
   padding: 40px 60px;
   text-align: center;
-  max-width: 400px;
+  max-width: 800px;
   width: 90%;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -50,28 +50,31 @@ body, html {
   line-height: 1.4;
 }
 
-.bouton_principal {
-    padding: 20px;
-    border-radius: 10px;
-    margin: 15px;
-    border: none;
-    color: white;
-    cursor: pointer;
-    background-color: #4caf50;
-    width: 60%;
-    font-size: 16px;
-}
-
-h1 {
-    font-size: x-large;
-    text-align: center;
-    color: #2e8330;
-    font-family: "Rubik", system-ui, -apple-system, BlinkMacSystemFont , "Segoe UI", sans-serif;
-}
-
+/* Aligner les boutons sur une même ligne */
 .boutons1 {
   display: flex;
-  align-items: center; /* Centre verticalement les enfants */
-  height: 100px; /* Exemple de hauteur */
+  justify-content: center;
+  align-items: center;
+  height: 100px;        /* on enlève la hauteur fixe */
+  margin-top: -30px;    /* distance entre le texte et les boutons */
 }
+
+/* Boutons */
+.bouton_principal {
+  padding: 0 10px;
+  height: 60px;
+  width: 200px;
+  border-radius: 10px;
+  margin: 5px 10px;    /* un peu moins de marge verticale */
+  border: none;
+  color: white;
+  cursor: pointer;
+  background-color: #4caf50;
+  font-size: 16px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+
+
 
