@@ -25,20 +25,39 @@ function CreerPartie() {
     }
 
     return (
-        <div class="Creer_partie">
-            <h1>Créer une partie</h1>
-            <input type="text"
-                placeholder='Entrez votre pseudo'
-                value={pseudo}
-                onChange={(e) => setPseudo(e.target.value)}
-            />
-            <select value={modeDeJeu} onChange={(e) => setModeDeJeu(e.target.value)}>
-                <option value="unanimite">Unanimité</option>
-                <option value="mediane">Médiane</option>
-            </select>
-            <button onClick={valider} disabled={pseudo.trim() === ''}>Valider</button>
+    <div className="Creer_partie">
+      <div className="carte_creer_partie">
+        <h1 className="titre_creer_partie">Créer une partie</h1>
+
+        <div className="ligne_formulaire">
+          <input
+            className="champ_texte"
+            type="text"
+            placeholder="Entrez votre pseudo"
+            value={pseudo}
+            onChange={(e) => setPseudo(e.target.value)}
+          />
+
+          <select
+            className="select_mode"
+            value={modeDeJeu}
+            onChange={(e) => setModeDeJeu(e.target.value)}
+          >
+            <option value="unanimite">Unanimité</option>
+            <option value="mediane">Médiane</option>
+          </select>
+
+          <button
+            className="bouton_valider"
+            onClick={valider}
+            disabled={pseudo.trim() === ""}
+          >
+            Valider
+          </button>
         </div>
-    )
+      </div>
+    </div>
+  );
 }
 
 export default CreerPartie
