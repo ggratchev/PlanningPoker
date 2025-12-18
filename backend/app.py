@@ -35,7 +35,8 @@ def creer_partie():
         'participants': [pseudo_createur],
         'statut': 'en_attente',
         'taches': taches,
-        'tempsVote': temps_vote
+        'tempsVote': temps_vote,
+        'tacheActuelle': 0
     }
 
     #print(parties[code_partie])
@@ -88,6 +89,99 @@ def demarrer_partie(code):
     return jsonify({
         'success': True,
         'code': code
+    })
+
+#route pour enregistrer un vote
+@app.route('/api/voter/<code>', methods=['POST'])
+def voter(code):
+    if code not in parties:
+        return jsonify({'error': 'Partie non trouvée'}), 404
+    
+    data = request.json
+    pseudo = data.get('pseudo')
+    vote = data.get('vote')
+    tache_index = data.get('tacheIndex', 0)
+    
+    if 'votes' not in parties[code]:
+        parties[code]['votes'] = {}
+    
+    if tache_index not in parties[code]['votes']:
+        parties[code]['votes'][tache_index] = {}
+    
+    parties[code]['votes'][tache_index][pseudo] = vote
+    
+    print(f"{pseudo} a voté {vote} pour la tâche {tache_index} de la partie {code}")
+    print("Votes actuels:", parties[code]['votes'])
+    
+    return jsonify({
+        'success': True,
+        'vote': vote
+    })
+
+#route pour vérifier les votes et passer à la tâche suivante
+@app.route('/api/verification-votes/<code>', methods=['POST'])
+def verification_votes(code):
+    """
+    Cette route gère la confirmation des résultats par chaque participant.
+    Quand tout le monde a confirmé:
+    - En mode unanimité: si tous ont voté pareil -> tâche suivante, sinon -> revote
+    - En mode médiane: passage direct à la tâche suivante
+    """
+    if code not in parties:
+        return jsonify({'error': 'Partie non trouvée'}), 404
+    
+    data = request.json
+    pseudo = data.get('pseudo')
+    tache_actuelle = parties[code].get('tacheActuelle', 0)
+    
+    if 'validationsOk' not in parties[code]:
+        parties[code]['validationsOk'] = {}
+    
+    if tache_actuelle not in parties[code]['validationsOk']:
+        parties[code]['validationsOk'][tache_actuelle] = []
+    
+    if pseudo not in parties[code]['validationsOk'][tache_actuelle]:
+        parties[code]['validationsOk'][tache_actuelle].append(pseudo)
+    
+    print(f"{pseudo} a confirmé les résultats pour la tâche {tache_actuelle}")
+    
+    #vérifier si tous ont confirmé
+    nombre_confirmations = len(parties[code]['validationsOk'][tache_actuelle])
+    nombre_participants = len(parties[code]['participants'])
+    tous_ont_confirme = nombre_confirmations == nombre_participants
+    
+    tache_changee = False
+    
+    if tous_ont_confirme:
+
+        mode_de_jeu = parties[code]['modeDeJeu']
+        
+        if mode_de_jeu == 'unanimite':
+            #récupérer tous les votes pour cette tâche
+            votes_tache = parties[code]['votes'][tache_actuelle]
+            votes_uniques = set(votes_tache.values())
+            
+            # Vérifier si unanimité
+            if len(votes_uniques) == 1:
+                print("unanimité")
+                parties[code]['tacheActuelle'] += 1
+                tache_changee = True
+            else:
+                print("pas d'unanimité")
+                #Supprimer les votes et confirmations pour recommencer
+                del parties[code]['votes'][tache_actuelle]
+                del parties[code]['validationsOk'][tache_actuelle]
+                tache_changee = True
+        else:
+            # Mode médiane: passage direct à la tâche suivante
+            "Mode médiane: passage à la tâche suivante")
+            parties[code]['tacheActuelle'] += 1
+            tache_changee = True
+    
+    return jsonify({
+        'success': True,
+        'tacheChangee': tache_changee,
+        'tacheActuelle': parties[code].get('tacheActuelle', 0)
     })
 
 if __name__ == '__main__':
