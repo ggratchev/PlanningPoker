@@ -15,7 +15,8 @@ function Jeu() {
     useEffect(() => {
         const chargerPartie = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/api/partie/${code}`)
+                //const response = await fetch(`http://localhost:5000/api/partie/${code}`)
+                const response = await fetch(`https://planningpoker-0aph.onrender.com/api/partie/${code}`)
                 const data = await response.json()
                 setPartie(data)
 
@@ -50,7 +51,8 @@ function Jeu() {
 
     const validerVote = async () => {
         try {
-            const response = await fetch(`http://localhost:5000/api/voter/${code}`, {
+            //const response = await fetch(`http://localhost:5000/api/voter/${code}`, {
+            const response = await fetch(`https://planningpoker-0aph.onrender.com/api/voter/${code}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -73,7 +75,8 @@ function Jeu() {
 
     const validerOk = async () => {
         try {
-            const response = await fetch(`http://localhost:5000/api/verification-votes/${code}`, {
+            //const response = await fetch(`http://localhost:5000/api/verification-votes/${code}`, {
+            const response = await fetch(`https://planningpoker-0aph.onrender.com/api/verification-votes/${code}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -110,7 +113,8 @@ function Jeu() {
 
     const telechargerResultats = async () => {
         try {
-            const response = await fetch(`http://localhost:5000/api/resultats/${code}`)
+            //const response = await fetch(`http://localhost:5000/api/resultats/${code}`)
+            const response = await fetch(`https://planningpoker-0aph.onrender.com/api/resultats/${code}`)
             const data = await response.json()
             
             // Créer un blob et télécharger le fichier

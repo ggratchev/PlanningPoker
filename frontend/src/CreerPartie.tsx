@@ -29,7 +29,8 @@ function CreerPartie() {
 
     const valider = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/creer-partie', {
+            //const response = await fetch('http://localhost:5000/api/creer-partie', {
+            const response = await fetch('https://planningpoker-0aph.onrender.com/api/creer-partie', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

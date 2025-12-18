@@ -12,7 +12,9 @@ function SalleAttente() {
     useEffect(() => {
         const chargerPartie = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/api/partie/${code}`)
+                //const response = await fetch(`http://localhost:5000/api/partie/${code}`)
+                const response = await fetch(`https://planningpoker-0aph.onrender.com/api/partie/${code}`)
+                
                 const data = await response.json()
                 setPartie(data)
 
@@ -38,7 +40,8 @@ function SalleAttente() {
 
     const demarrerPartie = async () => {
         try {
-            const response = await fetch(`http://localhost:5000/api/demarrer-partie/${code}`, {
+            //const response = await fetch(`http://localhost:5000/api/demarrer-partie/${code}`, {
+            const response = await fetch(`https://planningpoker-0aph.onrender.com/api/demarrer-partie/${code}`, {
                 method: 'POST'
             })
             const data = await response.json()
