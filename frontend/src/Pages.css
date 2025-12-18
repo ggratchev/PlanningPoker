@@ -84,6 +84,18 @@
   font-size: 0.8rem;
 }
 
+/* Changement de couleur quand il hover pour le "style" (a lire avec accent anglais) */
+.select_mode:hover { 
+  background-color: #f7fbf7; 
+}
+
+.select_mode:focus {
+  outline: none;
+  border-color: #4caf50;
+  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+}
+
+/* le bouton Valider */
 .bouton_valider {
   padding: 10px 20px;
   border-radius: 10px;
@@ -95,4 +107,3 @@
   cursor: pointer;
   transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
 }
-
