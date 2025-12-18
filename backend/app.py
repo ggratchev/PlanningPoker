@@ -26,11 +26,16 @@ def creer_partie():
     #print(f"Mode de jeu: {mode_de_jeu}")
     #print(code_partie)
 
+    taches = data.get('taches', [])
+    temps_vote = data.get('tempsVote', 30)
+
     parties[code_partie] = {
         'createur': pseudo_createur,
         'modeDeJeu': mode_de_jeu,
         'participants': [pseudo_createur],
-        'statut': 'en_attente'
+        'statut': 'en_attente',
+        'taches': taches,
+        'tempsVote': temps_vote
     }
 
     #print(parties[code_partie])

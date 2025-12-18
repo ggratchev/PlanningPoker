@@ -59,6 +59,7 @@ function SalleAttente() {
 
     return (
         <div>
+            <button onClick={() => navigate('/')}>Accueil</button>
             <h1>Salle d'attente</h1>
             <h2>Code de la partie : {code}</h2>
             <p>Mode de jeu : {partie.modeDeJeu}</p>

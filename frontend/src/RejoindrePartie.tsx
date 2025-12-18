@@ -40,6 +40,7 @@ function RejoindrePartie() {
 
     return (
         <div>
+            <button onClick={() => navigate('/')}>Retour à l'accueil</button>
             <h1>Rejoindre une partie</h1>
             <input type="text"
                 placeholder='Entrez le code de la partie'
