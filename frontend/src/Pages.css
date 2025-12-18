@@ -1,0 +1,28 @@
+/* Conteneur du select */
+.select_wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+/* Select stylé */
+.select_mode {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  padding: 10px 36px 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #cccccc;
+  font-size: 0.95rem;
+  background-color: #ffffff;
+  color: #333;
+  cursor: pointer;
+
+  font-family: "Rubik", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+
+  transition: border-color 0.2s ease, box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+

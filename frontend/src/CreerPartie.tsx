@@ -38,14 +38,16 @@ function CreerPartie() {
             onChange={(e) => setPseudo(e.target.value)}
           />
 
-          <select
-            className="select_mode"
-            value={modeDeJeu}
-            onChange={(e) => setModeDeJeu(e.target.value)}
-          >
-            <option value="unanimite">Unanimité</option>
-            <option value="mediane">Médiane</option>
-          </select>
+          <div className="select_wrapper">
+            <select
+                className="select_mode"
+                value={modeDeJeu}
+                onChange={(e) => setModeDeJeu(e.target.value)}
+            >
+                <option value="unanimite">Unanimité</option>
+                <option value="mediane">Médiane</option>
+            </select>
+        </div>
 
           <button
             className="bouton_valider"
