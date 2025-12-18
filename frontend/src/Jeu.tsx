@@ -19,18 +19,17 @@ function Jeu() {
                 const data = await response.json()
                 setPartie(data)
 
-                // Détecter si la tâche a changé OU si les votes ont été réinitialisés
+                // détecter si la tâche a changé ou si les votes ont été réinitialisés
                 const nouvelleTache = data.tacheActuelle || 0
                 const tacheAChange = nouvelleTache !== tacheActuellePrecedente
                 
-                // Vérifier si l'utilisateur a déjà voté pour cette tâche
+                // Vérifier si l'utilisateur a déjà voté pour cette tache
                 const aDejaVote = data.votes && 
                                   data.votes[nouvelleTache] && 
                                   data.votes[nouvelleTache][pseudo] !== undefined
                 
-                // Réinitialiser si la tâche a changé OU si on n'a plus de vote (revote)
+                //réinitialiser si la tâche a changé ou si on n'a plus de vote
                 if (tacheAChange || (aVote && !aDejaVote)) {
-                    console.log(`Réinitialisation: tâche=${nouvelleTache}, avait voté=${aVote}, a encore son vote=${aDejaVote}`)
                     setVote('')
                     setAVote(false)
                     setAValideOk(false)
@@ -43,7 +42,7 @@ function Jeu() {
 
         chargerPartie()
 
-        // Rafraîchir toutes les 2 secondes pour voir les votes des autres
+        // rafraichir toutes les 2 sec
         const interval = setInterval(chargerPartie, 2000)
 
         return () => clearInterval(interval)
@@ -86,7 +85,7 @@ function Jeu() {
             const data = await response.json()
             console.log('OK validé:', data)
             setAValideOk(true)
-            // La réinitialisation se fera automatiquement via useEffect quand la tâche change
+
         } catch (error) {
             console.error('Erreur:', error)
         }
@@ -107,6 +106,27 @@ function Jeu() {
     const afficherResultats = tousOntVote()
 
     const tacheActuelle = partie.tacheActuelle || 0
+    const partieTerminee = tacheActuelle >= partie.taches.length
+
+    const telechargerResultats = async () => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/resultats/${code}`)
+            const data = await response.json()
+            
+            // Créer un blob et télécharger le fichier
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
+            const url = window.URL.createObjectURL(blob)
+            const a = document.createElement('a')
+            a.href = url
+            a.download = `resultats_planning_poker_${code}.json`
+            document.body.appendChild(a)
+            a.click()
+            window.URL.revokeObjectURL(url)
+            document.body.removeChild(a)
+        } catch (error) {
+            console.error('Erreur:', error)
+        }
+    }
 
     return (
         <div>
@@ -115,7 +135,24 @@ function Jeu() {
             <p>Mode de jeu : {partie.modeDeJeu}</p>
             <p>Votre pseudo : {pseudo}</p>
 
-            {afficherResultats ? (
+            {partieTerminee && (
+                <div>
+                    {partie.pauseCafe ? (
+                        <>
+                            <h2>Pause café</h2>
+                            <p>La partie a été mise en pause pour une pause café. Vous pourrez reprendre la partie en important le json ci-dessous</p>
+                        </>
+                    ) : (
+                        <>
+                            <h2>Partie terminée !</h2>
+                            <p>Toutes les taches ont été estimées.</p>
+                        </>
+                    )}
+                    <button onClick={telechargerResultats}>Télécharger les résultats (JSON)</button>
+                </div>
+            )}
+
+            {!partieTerminee && afficherResultats ? (
                 <div>
                     <h2>Résultats des votes :</h2>
                     <h3>{partie.taches[tacheActuelle].nom}</h3>
@@ -131,7 +168,7 @@ function Jeu() {
                         {aValideOk ? 'En attente...' : 'OK'}
                     </button>
                 </div>
-            ) : (
+            ) : !partieTerminee ? (
                 <>
                     <h3>Participants :</h3>
                     <ul>
@@ -140,9 +177,9 @@ function Jeu() {
                         ))}
                     </ul>
                 </>
-            )}
+            ) : null}
 
-            {!afficherResultats && partie.taches && partie.taches.length > tacheActuelle && (
+            {!partieTerminee && !afficherResultats && partie.taches && partie.taches.length > tacheActuelle && (
                 <div>
                     <h2>Tâche à voter :</h2>
                     <h3>{partie.taches[tacheActuelle].nom}</h3>

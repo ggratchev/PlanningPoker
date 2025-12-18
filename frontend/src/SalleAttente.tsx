@@ -44,7 +44,6 @@ function SalleAttente() {
             const data = await response.json()
             console.log('Partie démarrée:', data)
 
-            // Rediriger le créateur vers la page de jeu
             navigate(`/jeu/${code}`, {
                 state: { pseudo: pseudo }
             })

@@ -14,6 +14,15 @@ def generer_code():
         if code not in parties:
             return code
 
+def tache_possede_difficulte(tache):
+    return 'difficulte' in tache and tache['difficulte'] is not None and tache['difficulte'] != ''
+
+def trouver_prochaine_tache_a_estimer(taches, index_actuel):
+    for i in range(index_actuel, len(taches)):
+        if not tache_possede_difficulte(taches[i]):
+            return i
+    return len(taches)
+
 #route pour créer une partie
 @app.route('/api/creer-partie', methods=['POST'])
 def creer_partie():
@@ -28,6 +37,9 @@ def creer_partie():
 
     taches = data.get('taches', [])
     temps_vote = data.get('tempsVote', 30)
+    
+    # Trouver la première tâche sans difficulté
+    premiere_tache_non_estimee = trouver_prochaine_tache_a_estimer(taches, 0)
 
     parties[code_partie] = {
         'createur': pseudo_createur,
@@ -36,7 +48,7 @@ def creer_partie():
         'statut': 'en_attente',
         'taches': taches,
         'tempsVote': temps_vote,
-        'tacheActuelle': 0
+        'tacheActuelle': premiere_tache_non_estimee
     }
 
     #print(parties[code_partie])
@@ -68,13 +80,65 @@ def rejoindre_partie(code):
     if pseudo not in parties[code]['participants']:
         parties[code]['participants'].append(pseudo)
     
-    print(f"{pseudo} a rejoint la partie {code}")
-    print("Participants:", parties[code]['participants'])
-    
     return jsonify({
         'success': True,
         'code': code
     })
+
+#route pour obtenir les résultats finaux de la partie
+@app.route('/api/resultats/<code>', methods=['GET'])
+def get_resultats(code):
+    if code not in parties:
+        return jsonify({'error': 'Partie non trouvée'}), 404
+    
+    partie = parties[code]
+    taches_avec_resultats = []
+    
+    #pour chaque tâche, ajouter la difficulté estimée
+    for index, tache in enumerate(partie['taches']):
+        tache_resultat = {
+            'nom': tache['nom'],
+            'description': tache['description']
+        }
+        
+        # si la tâche avait déjà une difficulté la conserver
+        if tache_possede_difficulte(tache):
+            tache_resultat['difficulte'] = tache['difficulte']
+        elif 'votes' in partie and index in partie['votes']:
+            votes = partie['votes'][index]
+            
+            if partie['modeDeJeu'] == 'unanimite':
+                difficulte = list(votes.values())[0] if votes else None
+            else:
+                #calculer la médiane
+                votes_numeriques = []
+                for v in votes.values():
+                    if v not in ['?', 'cafe']:
+                        try:
+                            votes_numeriques.append(float(v))
+                        except:
+                            pass
+                
+                if votes_numeriques:
+                    votes_numeriques.sort()
+                    n = len(votes_numeriques)
+                    if n % 2 == 0:
+                        difficulte = (votes_numeriques[n//2-1] + votes_numeriques[n//2]) / 2
+                    else:
+                        difficulte = votes_numeriques[n//2]
+                else:
+                    difficulte = None
+            
+            tache_resultat['difficulte'] = difficulte
+            #tache_resultat['votes_details'] = votes
+        else:
+            # Tâche ni importée avec difficulté, ni votée
+            tache_resultat['difficulte'] = None
+        
+        taches_avec_resultats.append(tache_resultat)
+    
+    print(f"Résultats générés pour la partie {code}")
+    return jsonify(taches_avec_resultats)
 
 #route pour démarrer une partie
 @app.route('/api/demarrer-partie/<code>', methods=['POST'])
@@ -109,10 +173,7 @@ def voter(code):
         parties[code]['votes'][tache_index] = {}
     
     parties[code]['votes'][tache_index][pseudo] = vote
-    
-    print(f"{pseudo} a voté {vote} pour la tâche {tache_index} de la partie {code}")
-    print("Votes actuels:", parties[code]['votes'])
-    
+     
     return jsonify({
         'success': True,
         'vote': vote
@@ -121,12 +182,6 @@ def voter(code):
 #route pour vérifier les votes et passer à la tâche suivante
 @app.route('/api/verification-votes/<code>', methods=['POST'])
 def verification_votes(code):
-    """
-    Cette route gère la confirmation des résultats par chaque participant.
-    Quand tout le monde a confirmé:
-    - En mode unanimité: si tous ont voté pareil -> tâche suivante, sinon -> revote
-    - En mode médiane: passage direct à la tâche suivante
-    """
     if code not in parties:
         return jsonify({'error': 'Partie non trouvée'}), 404
     
@@ -143,7 +198,7 @@ def verification_votes(code):
     if pseudo not in parties[code]['validationsOk'][tache_actuelle]:
         parties[code]['validationsOk'][tache_actuelle].append(pseudo)
     
-    print(f"{pseudo} a confirmé les résultats pour la tâche {tache_actuelle}")
+    #print(f"{pseudo} a confirmé les résultats pour la tâche {tache_actuelle}")
     
     #vérifier si tous ont confirmé
     nombre_confirmations = len(parties[code]['validationsOk'][tache_actuelle])
@@ -155,27 +210,36 @@ def verification_votes(code):
     if tous_ont_confirme:
 
         mode_de_jeu = parties[code]['modeDeJeu']
+        votes_tache = parties[code]['votes'][tache_actuelle]
+        votes_uniques = set(votes_tache.values())
         
-        if mode_de_jeu == 'unanimite':
+        # Vérifier si tout le monde a voté "café"
+        if len(votes_uniques) == 1 and 'cafe' in votes_uniques:
+
+            parties[code]['tacheActuelle'] = len(parties[code]['taches'])
+            parties[code]['pauseCafe'] = True
+            tache_changee = True
+        elif mode_de_jeu == 'unanimite':
             #récupérer tous les votes pour cette tâche
-            votes_tache = parties[code]['votes'][tache_actuelle]
-            votes_uniques = set(votes_tache.values())
-            
             # Vérifier si unanimité
             if len(votes_uniques) == 1:
-                print("unanimité")
-                parties[code]['tacheActuelle'] += 1
+                #print("unanimité")
+                # Passer à la prochaine tâche non estimée
+                prochaine_tache = trouver_prochaine_tache_a_estimer(parties[code]['taches'], tache_actuelle + 1)
+                parties[code]['tacheActuelle'] = prochaine_tache
                 tache_changee = True
             else:
-                print("pas d'unanimité")
+                #print("pas d'unanimité")
                 #Supprimer les votes et confirmations pour recommencer
                 del parties[code]['votes'][tache_actuelle]
                 del parties[code]['validationsOk'][tache_actuelle]
                 tache_changee = True
         else:
             # Mode médiane: passage direct à la tâche suivante
-            "Mode médiane: passage à la tâche suivante")
-            parties[code]['tacheActuelle'] += 1
+            #print("médiane")
+            # Passer à la prochaine tâche non estimée
+            prochaine_tache = trouver_prochaine_tache_a_estimer(parties[code]['taches'], tache_actuelle + 1)
+            parties[code]['tacheActuelle'] = prochaine_tache
             tache_changee = True
     
     return jsonify({
