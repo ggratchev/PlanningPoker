@@ -60,68 +60,85 @@ function CreerPartie() {
     }
 
     return (
-        <div className="Creer_partie">
-            <button onClick={() => navigate('/')}>Retour à l'accueil</button>
-            <div className="carte_creer_partie">
-                <h1 className="titre_creer_partie">Créer une partie</h1>
+    <div className="Creer_partie">
+        <button className="bouton_retour" onClick={() => navigate('/')}>
+        Retour à l'accueil
+        </button>
 
-                <div className="ligne_formulaire">
-                    <input
-                        className="champ_texte"
-                        type="text"
-                        placeholder="Entrez votre pseudo"
-                        value={pseudo}
-                        onChange={(e) => setPseudo(e.target.value)}
-                    />
+        <div className="carte_creer_partie">
+        <h1 className="titre_creer_partie">Créer une partie</h1>
 
-                    <div className="select_wrapper">
-                        <select
-                            className="select_mode"
-                            value={modeDeJeu}
-                            onChange={(e) => setModeDeJeu(e.target.value)}
-                        >
-                            <option value="unanimite">Unanimité</option>
-                            <option value="mediane">Médiane</option>
-                        </select>
-                    </div>
+        <div className="ligne_formulaire">
+            {/* Pseudo + mode de jeu sur la même ligne */}
+            <div className="ligne_pseudo_mode">
+            <div className="groupe_champ plein">
+                <label>Pseudo</label>
+                <input
+                className="champ_texte"
+                type="text"
+                placeholder="Entrez votre pseudo"
+                value={pseudo}
+                onChange={(e) => setPseudo(e.target.value)}
+                />
+            </div>
 
-                    <div className="select_wrapper">
-                        <label>Temps de vote :</label>
-                        <select
-                            className="select_mode"
-                            value={tempsVote}
-                            onChange={(e) => setTempsVote(Number(e.target.value))}
-                        >
-                            <option value={10}>10 secondes</option>
-                            <option value={20}>20 secondes</option>
-                            <option value={30}>30 secondes</option>
-                            <option value={60}>1 minute</option>
-                        </select>
-                    </div>
-
-                    <div className="select_wrapper">
-                        <label>Importer des tâches (JSON) :</label>
-                        <input
-                            type="file"
-                            accept=".json"
-                            onChange={importerTaches}
-                        />
-                        {taches.length > 0 && (
-                            <p>{taches.length} tâche(s) importée(s)</p>
-                        )}
-                    </div>
-
-                    <button
-                        className="bouton_valider"
-                        onClick={valider}
-                        disabled={pseudo.trim() === ""}
-                    >
-                        Valider
-                    </button>
+            <div className="groupe_champ">
+                <label>Mode de vote</label>
+                <div className="select_wrapper select_mode_jeu">
+                <select
+                    className="select_mode"
+                    value={modeDeJeu}
+                    onChange={(e) => setModeDeJeu(e.target.value)}
+                >
+                    <option value="unanimite">Unanimité</option>
+                    <option value="mediane">Médiane</option>
+                </select>
                 </div>
             </div>
+            </div>
+
+            <div className="groupe_champ">
+            <label>Temps de vote</label>
+            <div className="select_wrapper">
+                <select
+                className="select_mode"
+                value={tempsVote}
+                onChange={(e) => setTempsVote(Number(e.target.value))}
+                >
+                <option value={10}>10 secondes</option>
+                <option value={20}>20 secondes</option>
+                <option value={30}>30 secondes</option>
+                <option value={60}>1 minute</option>
+                </select>
+            </div>
+            </div>
+
+            <div className="groupe_champ">
+            <label>Importer des tâches (JSON)</label>
+            <div className="select_wrapper">
+                <input
+                type="file"
+                accept=".json"
+                onChange={importerTaches}
+                />
+            </div>
+            {taches.length > 0 && (
+                <p className="info_taches">{taches.length} tâche(s) importée(s)</p>
+            )}
+            </div>
+
+            <button
+            className="bouton_valider"
+            onClick={valider}
+            disabled={pseudo.trim() === ""}
+            >
+            Valider
+            </button>
         </div>
+        </div>
+    </div>
     );
+
 }
 
 export default CreerPartie
