@@ -1,16 +1,29 @@
 /* Carte centrale */
 .carte_creer_partie {
   background-color: #ffffff;
-  padding: 40px 60px;          /* même padding que Div_principal */
+  padding: 40px 60px;
   border-radius: 16px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-  max-width: 800px;            /* même largeur max que Div_principal */
-  width: 90%;                  /* même width */
+  max-width: 800px;
+  width: 90%;
   text-align: center;
+
+/* Petite animation d'apparition (fade + légère montée) */
+  opacity: 0;
+  transform: translateY(10px);
+  animation: apparition_carte 0.4s ease-out forwards;
+}
+
+/* Animation keyframes pour la carte */
+@keyframes apparition_carte {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .titre_creer_partie {
-  font-size: 2.2rem;           /* aligné sur titre_principal */
+  font-size: 2.2rem;  /* aligné sur titre_principal */
   margin-bottom: 30px;
   color: #2e8330;
   letter-spacing: 0.5px;

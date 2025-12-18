@@ -1,0 +1,115 @@
+.Rejoindre_partie {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #f5fff6, #e3f6e0);
+  font-family: "Rubik", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.carte_rejoindre_partie {
+  background-color: #ffffff;
+  padding: 40px 60px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  width: 90%;
+  text-align: center;
+
+  /* Petite animation d'apparition (fade + légère montée) */
+  opacity: 0;
+  transform: translateY(10px);
+  animation: apparition_carte 0.4s ease-out forwards;
+}
+
+/* Animation keyframes pour la carte */
+@keyframes apparition_carte {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+.titre_rejoindre_partie {
+  font-size: 2.2rem;
+  color: #2e8330;
+  margin: 0 0 30px 0;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+/* Ligne formulaire : input + bouton */
+.ligne_formulaire_rejoindre {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+
+
+.champ_texte_rejoindre {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #cccccc;
+  font-size: 0.95rem;
+  min-width: 220px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+/* Effet focus sur le champ */
+.champ_texte_rejoindre:focus {
+  border-color: #4caf50;
+  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+  transform: translateY(-1px); /* léger lift au focus */
+}
+
+.bouton_valider_rejoindre {
+  padding: 10px 24px;
+  border-radius: 10px;
+  border: none;
+  background-color: #4caf50;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+/* Effet quand le bouton est survolé ET cliquable */
+.bouton_valider_rejoindre:hover:enabled {
+  background-color: #45a049;                 /* vert un peu plus foncé */
+  transform: translateY(-2px);               /* légère remontée */
+  box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3); /* ombre douce */
+}
+
+/* Effet quand le bouton est désactivé */
+.bouton_valider_rejoindre:disabled {
+  background-color: #b9dec0;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Effet léger au clic */
+.bouton_valider_rejoindre:active:enabled {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(76, 175, 80, 0.2);
+}
+
+/* Responsive : empile l'input et le bouton sur petit écran */
+@media (max-width: 600px) {
+  .carte_rejoindre_partie {
+    padding: 30px 20px;
+  }
+
+  .ligne_formulaire_rejoindre {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .champ_texte_rejoindre,
+  .bouton_valider_rejoindre {
+    width: 100%;
+  }
+}
