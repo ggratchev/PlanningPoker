@@ -11,6 +11,7 @@ function Jeu() {
     const [aVote, setAVote] = useState(false)
     const [aValideOk, setAValideOk] = useState(false)
     const [tacheActuellePrecedente, setTacheActuellePrecedente] = useState(0)
+    const [tempsRestant, setTempsRestant] = useState(0)
 
     useEffect(() => {
         const chargerPartie = async () => {
@@ -48,6 +49,49 @@ function Jeu() {
 
         return () => clearInterval(interval)
     }, [code, tacheActuellePrecedente, aVote, pseudo])
+
+    // Compte à rebours
+    useEffect(() => {
+        if (!partie || !partie.heureDebutTache) return
+
+        const calculerTempsRestant = () => {
+            const tempsVote = partie.tempsVote || 30
+            const heureDebut = partie.heureDebutTache
+            const maintenant = Date.now() / 1000
+            const tempsEcoule = maintenant - heureDebut
+            const reste = Math.max(0, tempsVote - Math.floor(tempsEcoule))
+            setTempsRestant(reste)
+
+            if (reste === 0 && !aVote) {
+                voterAutomatiquement()
+            }
+        }
+
+        calculerTempsRestant()
+        const interval = setInterval(calculerTempsRestant, 1000)
+
+        return () => clearInterval(interval)
+    }, [partie, aVote])
+
+    const voterAutomatiquement = async () => {
+        try {
+            await fetch(`https://planningpoker-0aph.onrender.com/api/voter/${code}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    pseudo: pseudo,
+                    vote: '?',
+                    tacheIndex: partie.tacheActuelle || 0
+                })
+            })
+            setVote('?')
+            setAVote(true)
+        } catch (error) {
+            console.error('Erreur vote automatique:', error)
+        }
+    }
 
     const validerVote = async () => {
         try {
@@ -185,6 +229,9 @@ function Jeu() {
 
             {!partieTerminee && !afficherResultats && partie.taches && partie.taches.length > tacheActuelle && (
                 <div>
+                    <div >
+                        Temps restant : {tempsRestant}s
+                    </div>
                     <h2>Tâche à voter :</h2>
                     <h3>{partie.taches[tacheActuelle].nom}</h3>
                     <p>{partie.taches[tacheActuelle].description}</p>

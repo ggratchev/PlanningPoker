@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 import random
+import time
 
 app = Flask(__name__)
 CORS(app)
@@ -147,8 +148,9 @@ def demarrer_partie(code):
         return jsonify({'error': 'Partie non trouvée'}), 404
     
     parties[code]['statut'] = 'en_cours'
+    parties[code]['heureDebutTache'] = time.time()
     
-    #print(f"Partie {code} démarrée")
+    print(f"Partie {code} démarrée")
     
     return jsonify({
         'success': True,
@@ -218,28 +220,32 @@ def verification_votes(code):
 
             parties[code]['tacheActuelle'] = len(parties[code]['taches'])
             parties[code]['pauseCafe'] = True
+            parties[code]['heureDebutTache'] = time.time()
             tache_changee = True
         elif mode_de_jeu == 'unanimite':
             #récupérer tous les votes pour cette tâche
             # Vérifier si unanimité
             if len(votes_uniques) == 1:
-                #print("unanimité")
-                # Passer à la prochaine tâche non estimée
+                print("unanimité")
+                #Passer à la prochaine tâche non estimée
                 prochaine_tache = trouver_prochaine_tache_a_estimer(parties[code]['taches'], tache_actuelle + 1)
                 parties[code]['tacheActuelle'] = prochaine_tache
+                parties[code]['heureDebutTache'] = time.time()
                 tache_changee = True
             else:
-                #print("pas d'unanimité")
+                print("pas d'unanimité")
                 #Supprimer les votes et confirmations pour recommencer
                 del parties[code]['votes'][tache_actuelle]
                 del parties[code]['validationsOk'][tache_actuelle]
+                parties[code]['heureDebutTache'] = time.time()
                 tache_changee = True
         else:
             # Mode médiane: passage direct à la tâche suivante
-            #print("médiane")
+            print("Mode médiane: passage à la tâche suivante")
             # Passer à la prochaine tâche non estimée
             prochaine_tache = trouver_prochaine_tache_a_estimer(parties[code]['taches'], tache_actuelle + 1)
             parties[code]['tacheActuelle'] = prochaine_tache
+            parties[code]['heureDebutTache'] = time.time()
             tache_changee = True
     
     return jsonify({
