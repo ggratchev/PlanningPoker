@@ -108,11 +108,16 @@
   transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
 }
 
+/* Effet quand le bouton est survolé ET cliquable */
 .bouton_valider:hover:enabled {
-
+  background-color: #45a049;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(76, 175, 80, 0.3);
 }
 
+/* Style quand le bouton est désactivé */
 .bouton_valider:disabled {
-    
-
+  background-color: #b9dec0;
+  cursor: not-allowed; /* Curseur avec symbole d’interdiction */
+  box-shadow: none;
 }
