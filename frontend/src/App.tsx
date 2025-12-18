@@ -13,13 +13,24 @@ function App() {
   }
 
   return (
-    <div class="Div_principal">
-      <div class="texte_principal">
-        <h1>Planning Poker</h1>
+    <div className="Div_principal">
+      <div className="texte_principal">
+        <h1 className="titre_principal">
+          Planning Poker
+        </h1>
+        <p className="auteur">fait par 2G :</p>
+        <p>
+          Estimez vos tâches en équipe de façon ludique
+        </p>
       </div>
-      <div class="boutons1">
-        <button onClick={CreerPartie} class="bouton_principal">Créer une partie</button>
-        <button onClick={RejoindrePartie} class="bouton_principal">Rejoindre une partie</button>
+
+      <div className="boutons1">
+        <button onClick={CreerPartie} className="bouton_principal">
+        Créer une partie
+        </button>
+        <button onClick={RejoindrePartie} className="bouton_principal">
+          Rejoindre une partie
+        </button>
       </div>
     </div>
   )
