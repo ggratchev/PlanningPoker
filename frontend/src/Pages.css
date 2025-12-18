@@ -4,7 +4,7 @@
   display: inline-block;
 }
 
-/* Select stylé */
+/* Select mode de jeu */
 .select_mode {
   appearance: none;
   -webkit-appearance: none;
@@ -25,4 +25,14 @@
     background-color 0.2s ease;
 }
 
-
+/* Flèche du select */
+.select_wrapper::after {
+  content: "▾";
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #4caf50;
+  font-size: 0.8rem;
+}
