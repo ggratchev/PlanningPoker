@@ -19,7 +19,7 @@ function App() {
           Planning Poker
         </h1>
         <p className="auteur">fait par 2G :</p>
-        <p>
+        <p className="description">
           Estimez vos tâches en équipe de façon ludique
         </p>
       </div>
