@@ -34,13 +34,16 @@ body, html {
   font-weight: 600;
 }
 
-.auteur {
+/* 
+  .auteur {
   margin: 0;
   color: #4f4f4f;
   font-size: 1rem;
   font-weight: 500;
   text-align: center;
 }
+
+*/
 
 .description {
   color: #333;
@@ -55,8 +58,9 @@ body, html {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100px;        /* on enlève la hauteur fixe */
-  margin-top: -30px;    /* distance entre le texte et les boutons */
+  height: 100px;  /* on enlève la hauteur fixe */
+  margin-top: -30px;  /* distance entre le texte et les boutons */
+  gap: 20px;  /* espace propre entre les boutons */
 }
 
 /* Boutons */
@@ -65,7 +69,7 @@ body, html {
   height: 60px;
   width: 200px;
   border-radius: 10px;
-  margin: 5px 10px;    /* un peu moins de marge verticale */
+  margin: 0; /* le gap gere l’espace */
   border: none;
   color: white;
   cursor: pointer;
@@ -73,6 +77,27 @@ body, html {
   font-size: 16px;
   text-align: center;
   box-sizing: border-box;
+
+  display: flex;  /* centre le texte parfaitement */
+  justify-content: center;
+  align-items: center;
+
+  transition: background-color 0.2s ease,
+              transform 0.15s ease,
+              box-shadow 0.2s ease;
+}
+
+/* Les effets */
+.bouton_principal:hover {
+  background-color: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+}
+
+/* Effet léger au clic */
+.bouton_principal:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(76, 175, 80, 0.2);
 }
 
 
