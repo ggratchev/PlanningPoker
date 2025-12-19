@@ -200,7 +200,7 @@ function Jeu() {
     return (
         <div className="Jeu_page">
             <div className="Jeu_carte">
-                <button className="Jeu_bouton_retour" onClick={() => navigate('/')}>Retour à l'accueil</button>
+                <button className="btn_accueil" onClick={() => navigate('/')}>Retour à l'accueil</button>
                 <h1 className="Jeu_titre_principal">Partie {code}</h1>
                 <p className="Jeu_info">Mode de jeu : {partie.modeDeJeu}</p>
                 <p className="Jeu_info">Votre pseudo : {pseudo}</p>
