@@ -12,6 +12,8 @@ Projet réalisé dans le cadre du module de M1 Informatique Conception agile de 
 
 ## Démo
 
+**Important : le backend est hébergé gratuitement sur render.com qui met le projet en mode "sommeil" au bout de 15 minutes d'inactivité. Au "réveil" du backend ce-dernier mets quelques minutes (2-3 minutes) à se remettre en route. Donc il y aura un délai après le 1er appui sur "Créer une partie.**
+
 Le projet est hébergé sur Vercel (Frontend) et render.com (Backend). L'url peut changer avec le temps à cause des limitations pour les comptes gratuits mais un lien valide se trouve à droite du bouton vert "Code" sous la section "About" en haut à droite de la page de ce repo.
 
 
