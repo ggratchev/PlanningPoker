@@ -8,7 +8,7 @@
   width: 90%;
   text-align: center;
 
-/* Petite animation d'apparition (fade + légère montée) */
+  /* Petite animation d'apparition (fade + légère montée) */
   opacity: 0;
   transform: translateY(10px);
   animation: apparition_carte 0.4s ease-out forwards;
@@ -33,11 +33,31 @@
 /* le formulaire */
 .ligne_formulaire {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
+  flex-direction: column; /* on empile les blocs */
+  align-items: stretch;
+  gap: 16px;
 }
 
+/* Ligne pseudo + mode de jeu */
+.ligne_pseudo_mode {
+  display: grid;
+  grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.1fr);
+  gap: 16px;
+}
+
+.ligne_pseudo_mode .champ_texte {
+  flex: 1;
+}
+
+/* Groupe label + champ pour pseudo, select, etc. */
+.groupe_champ {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+
+/* Champ texte pseudo */
 .champ_texte { /* Champ texte pseudo */
   padding: 10px 12px;
   border-radius: 8px;
@@ -45,19 +65,41 @@
   font-size: 0.95rem;
   min-width: 200px;
   outline: none;
+  background-color: #f9fcfa;
+}
+
+.champ_texte::placeholder {
+  color: #a2afa5;
 }
 
 .champ_texte:focus {
   border-color: #4caf50;
   box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+  background-color: #ffffff;
 }
 
 /* le conteneur du select */
 .select_wrapper {
   position: relative;
-  display: inline-block;
+  display: flex; /* label + select sur une ligne (si besoin) */
+  align-items: center;
+  gap: 8px;
+  width: 100%;
 }
 
+/* pour les labels (Temps de vote, Importer…) */
+.select_wrapper label,
+.groupe_champ label {
+  font-size: 0.9rem;
+  color: #444;
+}
+
+/* largeur spécifique du select de mode de jeu */
+.select_mode_jeu {
+  min-width: 180px;
+}
+
+/* select générique (mode de jeu + temps de vote) */
 .select_mode {
   appearance: none;
   -webkit-appearance: none;
@@ -73,6 +115,7 @@
 
   font-family: "Rubik", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  width: 100%;
 }
 
 /* Flèche du select */
@@ -92,10 +135,24 @@
   background-color: #f7fbf7;
 }
 
+/* Surbrillance au focus */
 .select_mode:focus {
   outline: none;
   border-color: #4caf50;
   box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+}
+
+/* input type="file" dans wrapper import JSON */
+.select_wrapper input[type="file"] {
+  font-size: 0.9rem;
+}
+
+/* message "X tâche(s) importée(s)" */
+.select_wrapper p,
+.info_taches {
+  margin: 4px 0 0 0;
+  font-size: 0.85rem;
+  color: #2e8330;
 }
 
 /* le bouton Valider */
@@ -108,6 +165,8 @@
   font-size: 0.95rem;
   font-weight: 500;
   cursor: pointer;
+  align-self: center; /* centre le bouton dans la colonne */
+  min-width: 160px;
   transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
 }
 

@@ -1,0 +1,139 @@
+.Jeu_contenu {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.Jeu_bouton_retour {
+  margin-bottom: 16px;
+}
+
+.Jeu_header {
+  margin-bottom: 24px;
+}
+
+.Jeu_titre_principal {
+  font-size: 2.1rem;
+  margin: 4px 0 4px;
+  color: #2e8330;
+}
+
+.Jeu_info {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #2b4b34;
+}
+
+/* Blocs de contenu (résultats, participants, vote) */
+.Jeu_bloc {
+  margin: 12px 0 18px;
+  padding: 6px 0;
+}
+
+/* Titres de section */
+.Jeu_sous_titre {
+  font-size: 1.2rem;
+  margin: 0 0 6px;
+  color: #275236;
+}
+
+.Jeu_titre_tache {
+  font-size: 1.05rem;
+  margin: 4px 0;
+  color: #264931;
+}
+
+/* Texte */
+.Jeu_texte {
+  margin: 0 0 10px;
+  font-size: 0.94rem;
+  color: #345243;
+}
+
+/* Listes (participants, votes) */
+.Jeu_liste {
+  list-style: none;
+  padding-left: 0;
+  margin: 8px 0 10px;
+}
+
+.Jeu_liste_item {
+  font-size: 0.94rem;
+  margin-bottom: 4px;
+  color: #24372b;
+}
+
+/* Timer */
+.Jeu_timer {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #2e8330;
+  margin-bottom: 8px;
+}
+
+/* Zone de vote : label + select + bouton */
+.Jeu_vote_zone {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.Jeu_label {
+  font-size: 0.95rem;
+  color: #24372b;
+}
+
+/* Select */
+.Jeu_select {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #b7d1c0;
+  font-size: 0.95rem;
+  background-color: #ffffff;
+  color: #333;
+  cursor: pointer;
+}
+
+.Jeu_select:focus {
+  outline: none;
+  border-color: #4caf50;
+}
+
+/* Boutons d’action (Valider, OK, Télécharger) */
+.Jeu_bouton_action {
+  padding: 8px 20px;
+  border-radius: 999px;
+  border: none;
+  background-color: #4caf50;
+  color: #ffffff;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.Jeu_bouton_action:disabled {
+  background-color: #b9dec0;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.Jeu_bouton_action:hover:enabled {
+  background-color: #45a049;
+  transform: translateY(-1px);
+}
+
+/* Écran de chargement */
+.Jeu_chargement {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Rubik", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  font-size: 1rem;
+  color: #3f4f45;
+  background: #e7f6eb;
+}

@@ -1,6 +1,7 @@
 import { useParams, useLocation, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 
+
 function Jeu() {
     const { code } = useParams()
     const location = useLocation()
@@ -13,6 +14,7 @@ function Jeu() {
     const [tacheActuellePrecedente, setTacheActuellePrecedente] = useState(0)
     const [tempsRestant, setTempsRestant] = useState(0)
 
+
     useEffect(() => {
         const chargerPartie = async () => {
             try {
@@ -20,6 +22,7 @@ function Jeu() {
                 const response = await fetch(`https://planningpoker-0aph.onrender.com/api/partie/${code}`)
                 const data = await response.json()
                 setPartie(data)
+
 
                 // détecter si la tâche a changé ou si les votes ont été réinitialisés
                 const nouvelleTache = data.tacheActuelle || 0
@@ -42,17 +45,22 @@ function Jeu() {
             }
         }
 
+
         chargerPartie()
+
 
         // rafraichir toutes les 2 sec
         const interval = setInterval(chargerPartie, 2000)
 
+
         return () => clearInterval(interval)
     }, [code, tacheActuellePrecedente, aVote, pseudo])
+
 
     // Compte à rebours
     useEffect(() => {
         if (!partie || !partie.heureDebutTache) return
+
 
         const calculerTempsRestant = () => {
             const tempsVote = partie.tempsVote || 30
@@ -62,16 +70,20 @@ function Jeu() {
             const reste = Math.max(0, tempsVote - Math.floor(tempsEcoule))
             setTempsRestant(reste)
 
+
             if (reste === 0 && !aVote) {
                 voterAutomatiquement()
             }
         }
 
+
         calculerTempsRestant()
         const interval = setInterval(calculerTempsRestant, 1000)
 
+
         return () => clearInterval(interval)
     }, [partie, aVote])
+
 
     const voterAutomatiquement = async () => {
         try {
@@ -92,6 +104,7 @@ function Jeu() {
             console.error('Erreur vote automatique:', error)
         }
     }
+
 
     const validerVote = async () => {
         try {
@@ -117,6 +130,7 @@ function Jeu() {
         }
     }
 
+
     const validerOk = async () => {
         try {
             //const response = await fetch(`http://localhost:5000/api/verification-votes/${code}`, {
@@ -133,14 +147,17 @@ function Jeu() {
             console.log('OK validé:', data)
             setAValideOk(true)
 
+
         } catch (error) {
             console.error('Erreur:', error)
         }
     }
 
+
     if (!partie) {
-        return <div>Chargement...</div>
+        return <div className="Jeu_chargement">Chargement...</div>
     }
+
 
     // Vérifier si tout le monde a voté pour la tâche actuelle
     const tousOntVote = () => {
@@ -150,10 +167,13 @@ function Jeu() {
         return partie.participants.every(participant => votesActuels[participant] !== undefined)
     }
 
+
     const afficherResultats = tousOntVote()
+
 
     const tacheActuelle = partie.tacheActuelle || 0
     const partieTerminee = tacheActuelle >= partie.taches.length
+
 
     const telechargerResultats = async () => {
         try {
@@ -176,92 +196,100 @@ function Jeu() {
         }
     }
 
+
     return (
-        <div>
-            <button onClick={() => navigate('/')}>Retour à l'accueil</button>
-            <h1>Partie {code}</h1>
-            <p>Mode de jeu : {partie.modeDeJeu}</p>
-            <p>Votre pseudo : {pseudo}</p>
+        <div className="Jeu_page">
+            <div className="Jeu_carte">
+                <button className="btn_accueil" onClick={() => navigate('/')}>Retour à l'accueil</button>
+                <h1 className="Jeu_titre_principal">Partie {code}</h1>
+                <p className="Jeu_info">Mode de jeu : {partie.modeDeJeu}</p>
+                <p className="Jeu_info">Votre pseudo : {pseudo}</p>
 
-            {partieTerminee && (
-                <div>
-                    {partie.pauseCafe ? (
-                        <>
-                            <h2>Pause café</h2>
-                            <p>La partie a été mise en pause pour une pause café. Vous pourrez reprendre la partie en important le json ci-dessous</p>
-                        </>
-                    ) : (
-                        <>
-                            <h2>Partie terminée !</h2>
-                            <p>Toutes les taches ont été estimées.</p>
-                        </>
-                    )}
-                    <button onClick={telechargerResultats}>Télécharger les résultats (JSON)</button>
-                </div>
-            )}
 
-            {!partieTerminee && afficherResultats ? (
-                <div>
-                    <h2>Résultats des votes :</h2>
-                    <h3>{partie.taches[tacheActuelle].nom}</h3>
-                    <p>{partie.taches[tacheActuelle].description}</p>
-                    <ul>
-                        {partie.participants.map((participant, index) => (
-                            <li key={index}>
-                                {participant} : {partie.votes[tacheActuelle][participant]}
-                            </li>
-                        ))}
-                    </ul>
-                    <button onClick={validerOk} disabled={aValideOk}>
-                        {aValideOk ? 'En attente...' : 'OK'}
-                    </button>
-                </div>
-            ) : !partieTerminee ? (
-                <>
-                    <h3>Participants :</h3>
-                    <ul>
-                        {partie.participants.map((participant, index) => (
-                            <li key={index}>{participant}</li>
-                        ))}
-                    </ul>
-                </>
-            ) : null}
-
-            {!partieTerminee && !afficherResultats && partie.taches && partie.taches.length > tacheActuelle && (
-                <div>
-                    <div >
-                        Temps restant : {tempsRestant}s
+                {partieTerminee && (
+                    <div className="Jeu_bloc">
+                        {partie.pauseCafe ? (
+                            <>
+                                <h2 className="Jeu_sous_titre">Pause café</h2>
+                                <p className="Jeu_texte">La partie a été mise en pause pour une pause café. Vous pourrez reprendre la partie en important le json ci-dessous</p>
+                            </>
+                        ) : (
+                            <>
+                                <h2 className="Jeu_sous_titre">Partie terminée !</h2>
+                                <p className="Jeu_texte">Toutes les taches ont été estimées.</p>
+                            </>
+                        )}
+                        <button className="Jeu_bouton_action" onClick={telechargerResultats}>Télécharger les résultats (JSON)</button>
                     </div>
-                    <h2>Tâche à voter :</h2>
-                    <h3>{partie.taches[tacheActuelle].nom}</h3>
-                    <p>{partie.taches[tacheActuelle].description}</p>
+                )}
 
-                    <div>
-                        <label>Votre vote :</label>
-                        <select value={vote} onChange={(e) => setVote(e.target.value)}>
-                            <option value="">-- Choisissez --</option>
-                            <option value="0">0</option>
-                            <option value="0.5">1/2</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="5">5</option>
-                            <option value="8">8</option>
-                            <option value="13">13</option>
-                            <option value="20">20</option>
-                            <option value="40">40</option>
-                            <option value="100">100</option>
-                            <option value="?">?</option>
-                            <option value="cafe">Café</option>
-                        </select>
-                        <button onClick={validerVote} disabled={vote === '' || aVote}>
-                            {aVote ? 'Vote enregistré' : 'Valider'}
+
+                {!partieTerminee && afficherResultats ? (
+                    <div className="Jeu_bloc">
+                        <h2 className="Jeu_sous_titre">Résultats des votes :</h2>
+                        <h3 className="Jeu_titre_tache">{partie.taches[tacheActuelle].nom}</h3>
+                        <p className="Jeu_texte">{partie.taches[tacheActuelle].description}</p>
+                        <ul className="Jeu_liste">
+                            {partie.participants.map((participant, index) => (
+                                <li className="Jeu_liste_item" key={index}>
+                                    {participant} : {partie.votes[tacheActuelle][participant]}
+                                </li>
+                            ))}
+                        </ul>
+                        <button className="Jeu_bouton_action" onClick={validerOk} disabled={aValideOk}>
+                            {aValideOk ? 'En attente...' : 'OK'}
                         </button>
                     </div>
-                </div>
-            )}
+                ) : !partieTerminee ? (
+                    <>
+                        <h3 className="Jeu_sous_titre">Participants :</h3>
+                        <ul className="Jeu_liste">
+                            {partie.participants.map((participant, index) => (
+                                <li className="Jeu_liste_item" key={index}>{participant}</li>
+                            ))}
+                        </ul>
+                    </>
+                ) : null}
+
+
+                {!partieTerminee && !afficherResultats && partie.taches && partie.taches.length > tacheActuelle && (
+                    <div className="Jeu_bloc">
+                        <div className="Jeu_timer">
+                            Temps restant : {tempsRestant}s
+                        </div>
+                        <h2 className="Jeu_sous_titre">Tâche à voter :</h2>
+                        <h3 className="Jeu_titre_tache">{partie.taches[tacheActuelle].nom}</h3>
+                        <p className="Jeu_texte">{partie.taches[tacheActuelle].description}</p>
+
+
+                        <div className="Jeu_vote_zone">
+                            <label className="Jeu_label">Votre vote :</label>
+                            <select className="Jeu_select" value={vote} onChange={(e) => setVote(e.target.value)}>
+                                <option value="">-- Choisissez --</option>
+                                <option value="0">0</option>
+                                <option value="0.5">1/2</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="5">5</option>
+                                <option value="8">8</option>
+                                <option value="13">13</option>
+                                <option value="20">20</option>
+                                <option value="40">40</option>
+                                <option value="100">100</option>
+                                <option value="?">?</option>
+                                <option value="cafe">Café</option>
+                            </select>
+                            <button className="Jeu_bouton_action" onClick={validerVote} disabled={vote === '' || aVote}>
+                                {aVote ? 'Vote enregistré' : 'Valider'}
+                            </button>
+                        </div>
+                    </div>
+                )}
+            </div>
         </div>
     )
 }
+
 
 export default Jeu

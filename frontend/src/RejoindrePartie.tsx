@@ -41,7 +41,7 @@ function RejoindrePartie() {
 
     return (
         <div className="Rejoindre_partie">
-            <button onClick={() => navigate('/')}>Retour à l'accueil</button>
+            <button className="bouton_retour" onClick={() => navigate('/')}> Retour à l'accueil </button>
             <div className="carte_rejoindre_partie">
                 <h1 className="titre_rejoindre_partie">Rejoindre une partie</h1>
 
