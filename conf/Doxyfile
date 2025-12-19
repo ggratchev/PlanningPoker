@@ -2,10 +2,10 @@ PROJECT_NAME           = "Planning Poker"
 PROJECT_NUMBER         = 1.0
 
 # Output directory for the generated documentation
-OUTPUT_DIRECTORY       = ../documentation
+OUTPUT_DIRECTORY       = documentation
 
 # Source code directory
-INPUT                  = ../backend
+INPUT                  = backend
 
 # Recurse through all subdirectories
 RECURSIVE              = YES
