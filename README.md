@@ -4,10 +4,17 @@
 Projet réalisé dans le cadre du module de M1 Informatique Conception agile de projets informatiques (Valentin Lachand-Pascal 2025-26) à l'université Lyon 2.
 
 
-## Authors
+## Auteurs
 
 - [@ggratchev](https://www.github.com/ggratchev)
 - [@Gast225245](https://github.com/Gast225245)
+
+
+## Démo
+
+Le projet est hébergé sur Vercel (Frontend) et render.com (Backend). L'url peut changer avec le temps à cause des limitations pour les comptes gratuits mais un lien valide se trouve à droite du bouton vert "Code" sous la section "About" en haut à droite de la page de ce repo.
+
+
 
 
 ## Pour lancer le projet en local
