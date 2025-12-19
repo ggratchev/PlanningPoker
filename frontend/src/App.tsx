@@ -4,6 +4,7 @@ import "./principale.css"
 import "./CreerPartie.css";
 import "./RejoindrePartie.css";
 import "./SalleAttente.css";
+import "./Jeu.css";
 
 function App() {
   const navigate = useNavigate();
