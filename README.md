@@ -1,7 +1,7 @@
 
 # Application Planning Poker
 
-Projet réalisé dans le cadre du module de M1 Informatique Conception agile de projets informatiques (Valentin Lachand-Pascal 2025-26) à l'université Lyon 2.
+Projet réalisé dans le cadre du module de M1 Informatique Conception agile de projets informatiques (Valentin Lachand-Pascal 2025-26) à l'université Lyon 2. Il s'agit d'une web app réalisée en react.js (frontend) et flask (backend) permettant à plusieurs personnes de faire un Planning Poker.
 
 
 ## Auteurs
@@ -83,3 +83,21 @@ Le projet sera ensuite accessible sur [http://localhost:5173](http://localhost:5
 ## Documentation
 La documentation Doxygen du backend est accessible sur https://ggratchev.github.io/PlanningPoker/
 
+### Format JSON attendu
+
+Pour importer des tâches le json doit être formaté de cette façon :
+
+```
+[
+  {
+    "nom": "tache 1",
+    "description": "Description 1"
+  },
+    {
+    "nom": "tache 2",
+    "description": "Description 2"
+  }
+]
+```
+
+Les json générés par ce projet à la suite d'une pause café sont également importables à la création d'une partie, ce qui permet de reprendre la partie là où elle s'était arrêtée.
