@@ -1,3 +1,7 @@
+## @file app.py
+#  @brief API Flask pour le Planning Poker
+#  @details Gère les parties, votes, et génération des résultats JSON
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
@@ -7,24 +11,39 @@ import time
 app = Flask(__name__)
 CORS(app)
 
+## @var parties
+#  @brief Dictionnaire stockant toutes les parties en cours
+#  @details {code: {createur, modeDeJeu, participants[], statut, taches[], tempsVote, tacheActuelle, heureDebutTache, votes{}, validationsOk{}, pauseCafe}}
 parties = {}
 
+## @brief Génère un code unique à 4 chiffres pour une partie
+#  @details Génère aléatoirement un code entre 1000 et 9999 et vérifie qu'il n'existe pas déjà dans le dictionaire parties
+#  @return code sous forme de string
 def generer_code():
     while True:
         code = str(random.randint(1000, 9999))
         if code not in parties:
             return code
 
+## @brief Vérifie dans un json si une tâche possède déjà une difficulté estimée
+#  @param tache Dictionnaire représentant une tâche avec ses propriétés
+#  @return True si la tâche a une difficulté définie et non vide, False sinon
 def tache_possede_difficulte(tache):
     return 'difficulte' in tache and tache['difficulte'] is not None and tache['difficulte'] != ''
 
+## @brief Trouve l'index de la prochaine tâche sans difficulté
+#  @param taches Liste des tâches de la partie
+#  @param index_actuel Index à partir duquel commencer la recherche
+#  @return Index de la première tâche sans difficulté, ou len(taches) si toutes sont estimées
 def trouver_prochaine_tache_a_estimer(taches, index_actuel):
     for i in range(index_actuel, len(taches)):
         if not tache_possede_difficulte(taches[i]):
             return i
     return len(taches)
 
-#route pour créer une partie
+## @brief Route API pour créer une nouvelle partie
+#  @details Méthode POST acceptant : pseudo (str), modeDeJeu (str: 'unanimite' ou 'mediane'), tempsVote (int), taches (list)
+#  @return JSON contenant le code de la partie créée
 @app.route('/api/creer-partie', methods=['POST'])
 def creer_partie():
     data = request.json
@@ -32,14 +51,9 @@ def creer_partie():
     mode_de_jeu = data.get('modeDeJeu')
     code_partie = generer_code()
 
-    #print(f"Pseudo du créateur: {pseudo_createur}")
-    #print(f"Mode de jeu: {mode_de_jeu}")
-    #print(code_partie)
-
     taches = data.get('taches', [])
     temps_vote = data.get('tempsVote', 30)
     
-    # Trouver la première tâche sans difficulté
     premiere_tache_non_estimee = trouver_prochaine_tache_a_estimer(taches, 0)
 
     parties[code_partie] = {
@@ -52,14 +66,14 @@ def creer_partie():
         'tacheActuelle': premiere_tache_non_estimee
     }
 
-    #print(parties[code_partie])
-
-    print("toutes les parties:", parties)
     return jsonify({
         'code': code_partie
     })
 
-#route pour recuperer infos d'une partie
+## @brief Route API pour récupérer les informations d'une partie
+#  @details Méthode GET retournant toutes les données de la partie sauf les infos sensibles
+#  @param code Code unique de la partie
+#  @return JSON avec {success: bool, partie: dict} ou erreur 404 si la partie n'existe pas
 @app.route('/api/partie/<code>', methods=['GET'])
 def get_partie(code):
     if code not in parties:
@@ -69,7 +83,10 @@ def get_partie(code):
 
     return jsonify(parties[code])
 
-#route pour rejoindre une partie
+## @brief route API pour rejoindre une partie existante
+#  @details Méthode POST acceptant : pseudo (str). Ajoute le participant à la liste si le pseudo n'existe pas déjà
+#  @param code Code unique de la partie à rejoindre
+#  @return JSON avec {success: bool, message: str} ou erreur 404 si la partie n'existe pas
 @app.route('/api/rejoindre-partie/<code>', methods=['POST'])
 def rejoindre_partie(code):
     data = request.json
@@ -86,7 +103,10 @@ def rejoindre_partie(code):
         'code': code
     })
 
-#route pour obtenir les résultats finaux de la partie
+## @brief Route API pour récupérer les résultats finaux d'une partie
+#  @details Génère un fichier JSON avec toutes les tâches et leurs difficultés
+#  @param code Code unique de la partie
+#  @return JSON contenant la liste des tâches avec difficultés estimées
 @app.route('/api/resultats/<code>', methods=['GET'])
 def get_resultats(code):
     if code not in parties:
@@ -131,9 +151,8 @@ def get_resultats(code):
                     difficulte = None
             
             tache_resultat['difficulte'] = difficulte
-            #tache_resultat['votes_details'] = votes
         else:
-            # Tâche ni importée avec difficulté, ni votée
+            # Tâche ni importée avec difficluté ni votée
             tache_resultat['difficulte'] = None
         
         taches_avec_resultats.append(tache_resultat)
@@ -141,7 +160,10 @@ def get_resultats(code):
     print(f"Résultats générés pour la partie {code}")
     return jsonify(taches_avec_resultats)
 
-#route pour démarrer une partie
+## @brief Route API pour démarrer une partie en attente
+#  @details Change le statut de 'en_attente' à 'en_cours' et initialise heureDebutTache pour le timer
+#  @param code Code unique de la partie à démarrer
+#  @return JSON avec {'success': True,'code': code} ou erreur 404 si la partie n'existe pas
 @app.route('/api/demarrer-partie/<code>', methods=['POST'])
 def demarrer_partie(code):
     if code not in parties:
@@ -150,14 +172,15 @@ def demarrer_partie(code):
     parties[code]['statut'] = 'en_cours'
     parties[code]['heureDebutTache'] = time.time()
     
-    print(f"Partie {code} démarrée")
-    
     return jsonify({
         'success': True,
         'code': code
     })
 
-#route pour enregistrer un vote
+## @brief Route API pour enregistrer le vote d'un participant
+#  @details Méthode POST acceptant : pseudo (str), vote (str). Enregistre le vote pour la tâche actuelle
+#  @param code Code unique de la partie
+#  @return JSON avec {success: bool, message: str} ou erreur 404 si la partie n'existe pas
 @app.route('/api/voter/<code>', methods=['POST'])
 def voter(code):
     if code not in parties:
@@ -181,7 +204,10 @@ def voter(code):
         'vote': vote
     })
 
-#route pour vérifier les votes et passer à la tâche suivante
+## @brief Route API pour valider les résultats de vote et passer à la tâche suivante
+#  @details Gère la logique d'unanimité/médiane, détecte les pauses café, et fait avancer la partie
+#  @param code Code unique de la partie
+#  @return JSON avec {success: bool, tacheChangee: bool, tacheActuelle: int} ou erreur 404
 @app.route('/api/verification-votes/<code>', methods=['POST'])
 def verification_votes(code):
     if code not in parties:
@@ -199,8 +225,6 @@ def verification_votes(code):
     
     if pseudo not in parties[code]['validationsOk'][tache_actuelle]:
         parties[code]['validationsOk'][tache_actuelle].append(pseudo)
-    
-    #print(f"{pseudo} a confirmé les résultats pour la tâche {tache_actuelle}")
     
     #vérifier si tous ont confirmé
     nombre_confirmations = len(parties[code]['validationsOk'][tache_actuelle])
@@ -226,23 +250,19 @@ def verification_votes(code):
             #récupérer tous les votes pour cette tâche
             # Vérifier si unanimité
             if len(votes_uniques) == 1:
-                print("unanimité")
-                #Passer à la prochaine tâche non estimée
+                # Passer à la prochaine tâche non estimée
                 prochaine_tache = trouver_prochaine_tache_a_estimer(parties[code]['taches'], tache_actuelle + 1)
                 parties[code]['tacheActuelle'] = prochaine_tache
                 parties[code]['heureDebutTache'] = time.time()
                 tache_changee = True
             else:
-                print("pas d'unanimité")
                 #Supprimer les votes et confirmations pour recommencer
                 del parties[code]['votes'][tache_actuelle]
                 del parties[code]['validationsOk'][tache_actuelle]
                 parties[code]['heureDebutTache'] = time.time()
                 tache_changee = True
         else:
-            # Mode médiane: passage direct à la tâche suivante
-            print("Mode médiane: passage à la tâche suivante")
-            # Passer à la prochaine tâche non estimée
+        # mode de jeu médiane
             prochaine_tache = trouver_prochaine_tache_a_estimer(parties[code]['taches'], tache_actuelle + 1)
             parties[code]['tacheActuelle'] = prochaine_tache
             parties[code]['heureDebutTache'] = time.time()
