@@ -1,0 +1,109 @@
+/* Carte centrale */
+.salle_attente_carte {
+  background-color: #ffffff;
+  padding: 32px 40px;
+  border-radius: 18px;
+  box-shadow: 0 10px 26px rgba(21, 53, 31, 0.18);
+  max-width: 520px;
+  width: 90%;
+  text-align: center;
+}
+
+/* Bouton Accueil */
+.salle_attente_carte .btn_accueil {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid #4caf50;
+  background-color: #ffffff;
+  color: #4caf50;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease,
+    box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.salle_attente_carte .btn_accueil:hover {
+  background-color: #4caf50;
+  color: #ffffff;
+  box-shadow: 0 3px 8px rgba(76, 175, 80, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Titres */
+.salle_attente_carte h1 {
+  font-size: 1.9rem;
+  margin-bottom: 8px;
+  color: #2f7d3a;
+}
+
+.salle_attente_carte h2 {
+  font-size: 1.2rem;
+  margin-bottom: 6px;
+  color: #345241;
+}
+
+.salle_attente_carte h3 {
+  font-size: 1.1rem;
+  margin: 18px 0 8px;
+  color: #486454;
+}
+
+/* Textes */
+.salle_attente_carte p {
+  margin: 4px 0 10px;
+  font-size: 0.95rem;
+  color: #4c5a52;
+}
+
+/* Liste des participants */
+.salle_attente_carte ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px;
+  text-align: left;
+}
+
+.salle_attente_carte li {
+  padding: 8px 10px;
+  border-radius: 10px;
+  background-color: #f4faf6;
+  margin-bottom: 6px;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Petit point avant chaque participant */
+.salle_attente_carte li::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #4caf50;
+}
+
+/* Bouton "Démarrer la partie" */
+.btn_demarrer {
+  margin-top: 10px;
+  padding: 10px 22px;
+  border-radius: 999px;
+  border: none;
+  background-color: #4caf50;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(76, 175, 80, 0.35);
+  transition: background-color 0.2s ease, transform 0.15s ease,
+    box-shadow 0.2s ease;
+}
+
+.btn_demarrer:hover {
+  background-color: #45a049;
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(76, 175, 80, 0.4);
+}
